@@ -1,0 +1,36 @@
+.option {
+    list-style: none;
+    padding: var(--spacing-1) var(--spacing-2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.option small {
+    color: #ffffff45;
+    text-transform: capitalize;
+    display: inline-flex;
+    margin-right: 10px;
+}
+
+.focused {
+    background-color: var(--focused-bg);
+}
+
+.keybind {
+    display: flex;
+    align-items: center;
+}
+.keybind > kbd {
+    background-color: #ffffff45;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+.keybind > kbd + kbd {
+    margin-left: 5px;
+}

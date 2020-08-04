@@ -1,0 +1,103 @@
+:root {
+    --bg: #161616f2;
+    --fg: #fff;
+    --spacing-1: 16px;
+    --spacing-2: 16px;
+    --border-radius: 6px;
+    --focused-bg: #85618D;
+}
+
+@keyframes overlay {
+  from {
+    background: transparent;
+  }
+  to {
+    background: var(--overlay);
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1;
+    --overlay: rgba(0, 0, 0, 0.6);
+    background: var(--overlay);
+    animation: overlay 0.2s ease;
+    transition: background-color 0.2s ease;
+    will-change: background;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.overlay * {
+    box-sizing: border-box;
+    font-family: "Inter";
+}
+
+.overlay.onExiting {
+  background: transparent !important;
+}
+
+.center {
+    height: 260px;
+    width: 100%;
+}
+
+.cmd {
+    margin: 0 auto;
+    background-color: #161616f2;
+    color: var(--fg);
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--border-radius);
+    font-size: 1em;
+    width: 40%;
+    min-width: 460px;
+    overflow: hidden;
+    animation: appear 0.2s ease;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    box-shadow: 0px 20px 60px rgba(0, 0, 0, 0.4), 0px 0px 60px rgba(0, 0, 0, 0.5), inset 0px 1px 0px rgba(0, 0, 0, 0.6);
+    will-change: transform, opacity;
+}
+.cmd.onExiting {
+  opacity: 0;
+  transform: scale(0.98);
+}
+
+.input {
+    background-color: transparent;
+    color: var(--fg);
+    border: 0;
+    outline: none;
+    width: 100%;
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: 1em;
+    line-height: 1.2em;
+    height: 60px;
+}
+
+.options {
+    margin: 0;
+    padding :0;
+    max-height: var(--height);
+    border-top: 1px solid #ffffff15;
+    overflow-y: auto;
+    height: 200px;
+}
+
