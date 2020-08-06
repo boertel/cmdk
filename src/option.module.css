@@ -7,6 +7,17 @@
     cursor: pointer;
 }
 
+.title {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.title > svg {
+    margin-right: 8px;
+    opacity: 0.5;
+}
+
 .option small {
     color: #ffffff45;
     text-transform: capitalize;

@@ -1,36 +1,65 @@
-import React, { useReducer, useEffect, useCallback } from 'react';
+import React, { useState, useReducer, useEffect, useCallback } from 'react';
 import Portal from '@reach/portal';
 import { Transition } from 'react-transition-group';
 import tinykeys from 'tinykeys';
 import cn from 'classnames';
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
+import debounce from 'lodash/debounce'
 
 import Option from './Option';
+import Loading from './Loading';
 import reducer, { initialState } from './reducer';
 import styles from './cmdk.module.css';
+
+
 
 function CmdK({
   open,
   placeholder,
-  options = [],
+  getOptions,
   keybind = '$mod+KeyK',
   children,
 }) {
+  const [ isLoading, setIsLoading ] = useState(false)
   const [state, dispatch] = useReducer(reducer, {
     ...initialState,
     isOpen: open,
-    filtered: options,
-    options,
   });
 
-  const { isOpen, query, focused, filtered } = state;
+  const { isOpen, query, focused, options, } = state;
 
-  const onChange = evt => {
-    dispatch({
-      type: 'filter',
-      query: evt.target.value,
-    });
-  };
+  const _getOptions = useCallback(debounce((query: string): void => {
+    setIsLoading(true)
+    getOptions(query).then(options => {
+      dispatch({
+        type: 'update',
+        options,
+      })
+      setIsLoading(false)
+    })
+  }, 200, { leading: true }), [])
+
+  const onChange = (evt) => dispatch({ type: 'filter', query: evt.target.value })
+
+  useEffect(() => {
+    _getOptions(query)
+  }, [query, _getOptions])
+
+  /*
+  const shortcuts: any = {};
+  options.forEach(option => {
+    const { callback, shortcut }: { callback: any; shortcut: any } = option;
+    if (shortcut && callback) {
+      shortcuts[shortcut] = useCallback(
+        evt => {
+          callback(option, evt);
+        },
+        [option]
+      );
+    }
+  });
+  */
+
 
   const optionsRef = useCallback(node => {
     if (node) {
@@ -44,22 +73,8 @@ function CmdK({
     }
   }, [isOpen]);
 
-  const shortcuts: any = {};
-  options.forEach(option => {
-    const { callback, shortcut }: { callback: any; shortcut: any } = option;
-    shortcuts[shortcut] = useCallback(
-      evt => {
-        if (typeof callback === 'function') {
-          callback(option, evt);
-        }
-      },
-      [option]
-    );
-  });
-
   useEffect(() => {
     const unsubscribe = tinykeys(window, {
-      ...shortcuts,
       Escape: () => {
         dispatch({ type: 'close' });
       },
@@ -70,7 +85,7 @@ function CmdK({
     });
 
     return unsubscribe;
-  }, [dispatch, shortcuts, keybind]);
+  }, [dispatch, keybind]);
 
   const onNavigateByKey = useCallback(
     evt => {
@@ -94,8 +109,7 @@ function CmdK({
     [dispatch]
   );
 
-  const onFocus = option => dispatch({ type: 'focus', option });
-
+  const onFocus = useCallback(option => dispatch({ type: 'focus', option }), [])
   const onExitClick = useCallback(() => dispatch({ type: 'close' }), []);
 
   return (
@@ -116,32 +130,30 @@ function CmdK({
                   })}
                   onClick={evt => evt.stopPropagation()}
                 >
-                  <input
-                    className={styles.input}
-                    type="text"
-                    autoFocus
-                    autoCapitalize="off"
-                    autoCorrect="off"
-                    autoComplete="off"
-                    placeholder={placeholder}
-                    onChange={onChange}
-                    value={query}
-                    onKeyDown={onNavigateByKey}
-                  />
+                  <div className={styles.input}>
+                    <input
+                      type="text"
+                      autoFocus
+                      autoCapitalize="off"
+                      autoCorrect="off"
+                      autoComplete="off"
+                      placeholder={placeholder}
+                      onChange={onChange}
+                      value={query}
+                      onKeyDown={onNavigateByKey}
+                    />
+                    {isLoading && <Loading />}
+                  </div>
                   <ul className={styles.options} ref={optionsRef}>
-                    {filtered
-                      .filter(({ name }) =>
-                        name.toLowerCase().includes(query.toLowerCase())
-                      )
-                      .map(option => (
-                        <Option
-                          key={option.name}
-                          focused={option === focused}
-                          onFocus={onFocus}
-                          dispatch={dispatch}
-                          option={option}
-                        />
-                      ))}
+                    {options.map(option => (
+                      <Option
+                        key={option.name}
+                        focused={option === focused}
+                        onFocus={onFocus}
+                        dispatch={dispatch}
+                        option={option}
+                      />
+                    ))}
                   </ul>
                 </div>
               </div>

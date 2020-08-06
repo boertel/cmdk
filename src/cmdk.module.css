@@ -65,7 +65,7 @@
     color: var(--fg);
     display: flex;
     flex-direction: column;
-    border-radius: var(--border-radius);
+    border-radius: 6px;
     font-size: 1em;
     width: 40%;
     min-width: 460px;
@@ -81,6 +81,11 @@
 }
 
 .input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.input > input {
     background-color: transparent;
     color: var(--fg);
     border: 0;

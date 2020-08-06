@@ -16,7 +16,7 @@ function Option({ focused, onFocus, dispatch, option }) {
     [focused]
   );
 
-  const { name, shortcut, subtitle, } = option;
+  const { name, shortcut, subtitle, icon: Icon } = option;
   const onClick = useCallback(() => {
     dispatch({ type: 'go' })
   }, [dispatch]);
@@ -30,7 +30,7 @@ function Option({ focused, onFocus, dispatch, option }) {
       onMouseOver={onHover}
       onClick={onClick}
     >
-      <div>{name}</div>
+      <div className={styles.title}>{Icon && <Icon />}<div>{name}</div></div>
       <div className={styles.keybind}>
          <small>{subtitle}</small>
         {shortcut && shortcut.split(" ").map(key => <kbd key={key}>{key}</kbd>)}

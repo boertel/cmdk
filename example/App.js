@@ -1,50 +1,66 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect } from 'react';
 
-import CmdK from "../.";
-import tinykeys from "tinykeys";
+import CmdK from '../.';
+import tinykeys from 'tinykeys';
 
-const callback = ({ name }) => console.log(`Navigate to ${name}`)
-const options = [
-  { callback, subtitle: "workspace", name: "Personal" },
-  { callback, subtitle: "workspace", name: "Ondeck" },
+const callback = ({ name }) => console.log(`Navigate to ${name}`);
+
+const search = (query) =>{
+  return new Promise(resolve => {
+    window.setTimeout(function() {
+      resolve(
+        OPTIONS.filter(({ name }) =>
+          name.toLowerCase().includes(query.trim().toLowerCase())
+        )
+      );
+    }, 500);
+  });
+}
+
+const OPTIONS = [
   {
     callback,
-    category: "board",
-    name: "Inspirations",
-    shortcut: "b 1"
+    category: 'board',
+    name: 'aaa',
+    shortcut: 'b 1',
   },
   {
     callback,
-    category: "board",
-    name: "Parking Lot",
-    shortcut: "b 2"
+    category: 'board',
+    name: 'aab',
+    shortcut: 'b 2',
   },
-  { callback, subtitle: "board", name: "Now", shortcut: "b 3" },
-  { callback, subtitle: "board", name: "Command", shortcut: "b 4" },
-  { callback, subtitle: "action", name: "Add ticket", shortcut: "i" },
+  { callback, subtitle: 'board', name: 'aabc', shortcut: 'b 3' },
+  { callback, subtitle: 'board', name: 'aabd', shortcut: 'b 4' },
+
+  { callback, subtitle: 'action', name: 'aaab', shortcut: 'i' },
+  { callback, subtitle: 'workspace', name: 'aabcd' },
+  { callback, subtitle: 'workspace', name: 'bbaa' },
 ];
 
-function App() {
-  const shortcuts = {};
-  options.forEach(option => {
-    const { callback, shortcut } = option;
-    shortcuts[shortcut] = useCallback(evt => callback(option, evt), [option]);
-  });
+const defaultOptions = Promise.resolve([
+  { callback, subtitle: 'action', name: 'aaab', shortcut: 'i' },
+  { callback, subtitle: 'workspace', name: 'aabcd' },
+  { callback, subtitle: 'workspace', name: 'bbaa' },
+]);
 
-  useEffect(
-    () => {
-      const unsubscribe = tinykeys(window, shortcuts);
-      return unsubscribe;
-    },
-    [shortcuts]
-  );
+
+const getOptions = (query = '') => {
+  if (query) {
+    return search(query)
+  } else {
+    return defaultOptions
+  }
+};
+
+function App() {
   return (
     <>
-    <CmdK
-      placeholder="Type a command or search for..."
-      open={true}
-      options={options}
-    />
+      <CmdK
+        placeholder="Type a command or search for..."
+        open={true}
+        getOptions={getOptions}
+      />
       <div>a</div>
       <div>a</div>
       <div>a</div>
