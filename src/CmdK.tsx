@@ -4,14 +4,12 @@ import { Transition } from 'react-transition-group';
 import tinykeys from 'tinykeys';
 import cn from 'classnames';
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
-import debounce from 'lodash/debounce'
+import debounce from 'lodash/debounce';
 
 import Option from './Option';
 import Loading from './Loading';
 import reducer, { initialState } from './reducer';
 import styles from './cmdk.module.css';
-
-
 
 function CmdK({
   open,
@@ -20,30 +18,37 @@ function CmdK({
   keybind = '$mod+KeyK',
   children,
 }) {
-  const [ isLoading, setIsLoading ] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [state, dispatch] = useReducer(reducer, {
     ...initialState,
     isOpen: open,
   });
 
-  const { isOpen, query, focused, options, } = state;
+  const { isOpen, query, focused, options } = state;
 
-  const _getOptions = useCallback(debounce((query: string): void => {
-    setIsLoading(true)
-    getOptions(query).then(options => {
-      dispatch({
-        type: 'update',
-        options,
-      })
-      setIsLoading(false)
-    })
-  }, 200, { leading: true }), [])
+  const _getOptions = useCallback(
+    debounce(
+      (query: string): void => {
+        setIsLoading(true);
+        getOptions(query).then(options => {
+          dispatch({
+            type: 'update',
+            options,
+          });
+          setIsLoading(false);
+        });
+      },
+      200,
+      { leading: true }
+    ),
+    []
+  );
 
-  const onChange = (evt) => dispatch({ type: 'filter', query: evt.target.value })
+  const onChange = evt => dispatch({ type: 'filter', query: evt.target.value });
 
   useEffect(() => {
-    _getOptions(query)
-  }, [query, _getOptions])
+    _getOptions(query);
+  }, [query, _getOptions]);
 
   /*
   const shortcuts: any = {};
@@ -59,7 +64,6 @@ function CmdK({
     }
   });
   */
-
 
   const optionsRef = useCallback(node => {
     if (node) {
@@ -109,7 +113,10 @@ function CmdK({
     [dispatch]
   );
 
-  const onFocus = useCallback(option => dispatch({ type: 'focus', option }), [])
+  const onFocus = useCallback(
+    option => dispatch({ type: 'focus', option }),
+    []
+  );
   const onExitClick = useCallback(() => dispatch({ type: 'close' }), []);
 
   return (

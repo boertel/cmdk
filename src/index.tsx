@@ -1,3 +1,3 @@
-import CmdK from './CmdK'
+import CmdK from './CmdK';
 
-export default CmdK
+export default CmdK;
