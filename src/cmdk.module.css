@@ -57,6 +57,7 @@
 .center {
   height: 260px;
   width: 100%;
+  padding: 10px;
 }
 
 .cmd {
@@ -67,8 +68,8 @@
   flex-direction: column;
   border-radius: 6px;
   font-size: 1em;
-  width: 40%;
-  min-width: 460px;
+  width: 100%;
+  max-width: 560px;
   overflow: hidden;
   animation: appear 0.2s ease;
   transition: transform 0.2s ease, opacity 0.2s ease;
