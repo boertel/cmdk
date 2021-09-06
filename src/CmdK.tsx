@@ -17,6 +17,7 @@ function CmdK({
   getOptions,
   keybind = '$mod+KeyK',
   children,
+  style,
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [state, dispatch] = useReducer(reducer, {
@@ -125,9 +126,13 @@ function CmdK({
         {transition => (
           <Portal>
             <div
-              className={cn(styles.overlay, {
-                [styles.onExiting]: transition === 'exiting',
-              })}
+              className={cn(
+                styles.overlay,
+                {
+                  [styles.onExiting]: transition === 'exiting',
+                },
+                style
+              )}
               onClick={onExitClick}
             >
               <div className={styles.center}>
