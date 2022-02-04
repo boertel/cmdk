@@ -47,7 +47,6 @@
 
 .overlay * {
   box-sizing: border-box;
-  font-family: 'Inter';
 }
 
 .overlay.onExiting {
