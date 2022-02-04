@@ -3,7 +3,6 @@ import Portal from '@reach/portal';
 import { Transition } from 'react-transition-group';
 import tinykeys from 'tinykeys';
 import cn from 'classnames';
-import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import debounce from 'lodash/debounce';
 
 import Option from './Option';
@@ -68,13 +67,13 @@ function CmdK({
 
   const optionsRef = useCallback(node => {
     if (node) {
-      disableBodyScroll(node);
+      //disableBodyScroll(node);
     }
   }, []);
 
   useEffect(() => {
     if (isOpen === false) {
-      clearAllBodyScrollLocks();
+      //clearAllBodyScrollLocks();
     }
   }, [isOpen]);
 
