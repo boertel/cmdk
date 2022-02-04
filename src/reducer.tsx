@@ -34,6 +34,7 @@ function reducer(state, action) {
       }
       return {
         ...state,
+        ...initialState,
         isOpen: true,
       };
 
@@ -85,12 +86,8 @@ function reducer(state, action) {
       if (focused?.callback) {
         focused.callback(focused);
       }
-      activeIndex = 0;
       return {
         ...state,
-        query: '',
-        focused: state.options[activeIndex],
-        activeIndex,
         isOpen: false,
       };
 
