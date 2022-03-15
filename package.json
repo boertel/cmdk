@@ -58,7 +58,7 @@
     "body-scroll-lock": "^3.0.3",
     "classnames": "^2.2.6",
     "lodash": "^4.17.21",
-    "lodash-es": "^4.17.15",
+    "lodash-es": "^4.17.21",
     "react-transition-group": "^4.4.1",
     "tinykeys": "^1.4.0"
   }
